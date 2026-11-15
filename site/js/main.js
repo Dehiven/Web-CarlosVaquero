@@ -597,7 +597,8 @@
     const sources = items.map(item => ({ img: $('img', item), aspect: 1.6, tex: null }));
     const geometry = new THREE.PlaneGeometry(1, 1);
     const pool = [];
-    for (let copy = -1; copy <= 1; copy++) {
+    const single = total === 1; // un solo proyecto: sin copias en bucle, se arrastra y vuelve al centro
+    for (const copy of single ? [0] : [-1, 0, 1]) {
       sources.forEach((_, i) => {
         const mat = new THREE.MeshBasicMaterial({ color: 0x1a1d29 });
         const mesh = new THREE.Mesh(geometry, mat);
@@ -616,10 +617,12 @@
     };
     const slotCenter = i => offsets[i] + sources[i].aspect * panelH / 2;
     const centerFor = index => {
+      if (single) return slotCenter(0);
       const loop = Math.floor(index / total), i = ((index % total) + total) % total;
       return slotCenter(i) + loop * loopW;
     };
     const nearest = value => {
+      if (single) return 0;
       let best = 0, dist = Infinity;
       for (let i = 0; i < total; i++) {
         const k = Math.round((value - slotCenter(i)) / loopW);
@@ -659,8 +662,7 @@
       uScene: { value: rt.texture },
       uRes: { value: new THREE.Vector2(W, H) },
       uLens: { value: new THREE.Vector2(W * .6, W) },
-      uTime: { value: 0 },
-      uRing: { value: new THREE.Color(cssVar('--teal-bright')) }
+      uTime: { value: 0 }
     };
     const lens = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
       uniforms: lensUniforms,
@@ -671,7 +673,6 @@
         uniform sampler2D uScene;
         uniform vec2 uRes, uLens;
         uniform float uTime;
-        uniform vec3 uRing;
 
         vec4 sampleScene(vec2 uv) { return texture2D(uScene, clamp(uv, 0.0, 1.0)); }
 
@@ -696,17 +697,8 @@
           float mask = 1.0 - smoothstep(0.93, 1.0, d);
           vec4 col = mix(base, lensCol, mask);
 
-          // Anillo de luz con brillo que recorre el borde
-          float ringD = d * 0.5 - 0.49;
-          float ring = exp(-pow(ringD / 0.01, 2.0));
-          float aura = exp(-pow(ringD / 0.06, 2.0)) * 0.28;
-          float shimmer = sin(ang * 12.0 + uTime * 3.5) * 0.12 + 0.88;
-          vec3 glow = uRing * (ring * shimmer * 0.42 + aura * 0.24) + vec3(exp(-pow((d * 0.5 - 0.488) / 0.003, 2.0)));
-
-          // Fondo transparente: se ve el fondo de la página entre las imágenes (rgb ya premultiplicado: el vacío es 0)
-          vec3 rgb = col.rgb + glow;
-          float alpha = clamp(col.a + max(glow.r, max(glow.g, glow.b)), 0.0, 1.0);
-          gl_FragColor = vec4(rgb, alpha);
+          // Sin fondo ni anillo: solo las imágenes sobre el fondo de la página (rgb ya premultiplicado: el vacío es 0)
+          gl_FragColor = vec4(col.rgb, col.a);
           #include <colorspace_fragment>
         }
       `
@@ -723,7 +715,7 @@
       pool.forEach(p => {
         const s = sources[p.i];
         let x = slotCenter(p.i) - scroll;
-        x = ((x % loopW) + loopW * 1.5) % loopW - loopW / 2 + p.copy * loopW;
+        if (!single) x = ((x % loopW) + loopW * 1.5) % loopW - loopW / 2 + p.copy * loopW;
         const w = s.aspect * panelH * shrink, h = panelH * shrink;
         const visible = Math.abs(x) < W / 2 + w / 2;
         p.mesh.visible = visible;
