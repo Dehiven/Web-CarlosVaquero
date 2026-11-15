@@ -71,17 +71,18 @@
     if (!title || !name) return;
     title.style.fontSize = '';
     const base = parseFloat(getComputedStyle(title).fontSize);
-    const ratio = title.clientWidth / name.offsetWidth;
+    const ratio = title.clientWidth / name.offsetWidth * .99; // margen: el texto no escala 100% lineal
     const vw = innerWidth / 100;
     title.style.fontSize = `${gsap.utils.clamp(6 * vw, 20 * vw, base * ratio)}px`;
   }
 
   /* Carga inicial */
   function initPageLoader() {
-    const element = $('.seq-element'), nav = $('#nav');
+    const element = $('.seq-photo'), aura = $('.seq-aura'), nav = $('#nav');
     if (reduced) return;
     gsap.timeline({ onComplete: scheduleRefresh })
       .fromTo(element, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.6, ease: 'expo.inOut' }, 0)
+      .fromTo(aura, { autoAlpha: 0, scale: .8 }, { autoAlpha: 1, scale: 1, duration: 2.4, ease: 'expo.out' }, .9)
       .fromTo(nav, { autoAlpha: 0 }, { autoAlpha: 1, duration: 1, ease: 'expo.inOut' }, 1);
   }
 
