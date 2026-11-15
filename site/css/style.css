@@ -128,7 +128,7 @@ img { display: block; max-width: 100%; }
   display: flex; justify-content: center; align-items: flex-start;
   padding-right: 16vw;
   pointer-events: none;
-  overflow: clip; /* recorta la luz sin romper el sticky ni ensanchar la página en móvil */
+  overflow-x: clip; /* solo en horizontal: evita scroll lateral en móvil; en vertical la luz se derrama sin corte */
 }
 .seq-element {
   position: sticky; top: var(--gutter);
@@ -136,7 +136,12 @@ img { display: block; max-width: 100%; }
   isolation: isolate;
 }
 /* Luz que continúa la iluminación de la foto (azul a la izquierda, turquesa a la derecha) fuera del encuadre */
-.seq-aura { position: absolute; inset: -25% -70%; z-index: 0; }
+.seq-aura {
+  position: absolute; inset: -25% -70%; z-index: 0;
+  /* the box edges must never show: fade to zero before reaching them */
+  -webkit-mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
+}
 .aura {
   position: absolute; display: block; border-radius: 50%;
   will-change: transform, opacity;
