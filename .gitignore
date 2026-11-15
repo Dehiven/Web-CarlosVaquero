@@ -1,0 +1,17 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# Herramientas locales (skills, hooks, ajustes de Claude)
+.agents/
+.codex/
+.claude/skills/
+.claude/agents/
+.claude/settings.local.json
+skills-lock.json
+.impeccable/hook.cache.json

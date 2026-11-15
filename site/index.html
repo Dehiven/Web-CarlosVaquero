@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carlos Vaquero — Diseño web, UX/UI y desarrollo</title>
+  <meta name="description" content="Carlos Vaquero, diseñador web, UX/UI, desarrollador e IA en Torrevieja, Alicante.">
+  <meta name="theme-color" content="#0D0E15">
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="preload" as="image" href="assets/foto.webp" type="image/webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Playfair+Display:ital,wght@1,400&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas class="cursor-canvas" data-cursor-canvas aria-hidden="true"></canvas>
+  <div class="cursor-dot" data-cursor-dot aria-hidden="true"></div>
+
+  <nav class="navbar" id="nav" aria-label="Principal">
+    <button class="nav-button is-menu" type="button" aria-expanded="false" aria-controls="menu">
+      <span class="menu-icon" aria-hidden="true"><i class="menu-dot"></i><i class="menu-dot"></i><i class="menu-dot"></i><i class="menu-dot"></i><i class="menu-dot"></i></span>
+      <span class="label">Menú</span>
+    </button>
+  </nav>
+
+  <div class="menu" id="menu">
+    <a class="menu-link" href="#top" data-link-stagger>Info</a>
+    <a class="menu-link" href="#about" data-link-stagger>Sobre mí</a>
+    <a class="menu-link" href="#work" data-link-stagger>Trabajos</a>
+    <a class="menu-link" href="#contact" data-link-stagger>Contacto</a>
+  </div>
+
+  <div class="page-wrapper">
+    <section class="hero-about" id="top">
+      <div class="seq-wrap" aria-hidden="true">
+        <div class="seq-element">
+          <img src="assets/foto.webp" alt="" width="1088" height="1445" fetchpriority="high">
+        </div>
+      </div>
+
+      <header class="hero">
+        <div class="header-top label">
+          <a href="#top" data-link-stagger>carlosvaquero.work</a>
+        </div>
+        <div class="hero-bottom">
+          <div class="header-intro">
+            <p class="label">Hola</p>
+            <div class="header-intro__right">
+              <p class="intro-tagline">Diseño, código e IA para webs que se sienten tan bien como se ven.</p>
+            </div>
+          </div>
+          <div class="line"></div>
+          <h1 class="hero-title" aria-label="Carlos Vaquero">
+            <span class="hero-name" data-stagger-char data-delay=".55">Carlosvaquero</span>
+            <span class="hero-domain" data-stagger-char data-delay=".85">.work</span>
+          </h1>
+        </div>
+      </header>
+
+      <div class="about" id="about">
+        <p class="label">Sobre mí</p>
+        <div class="about-list" data-reveal-group>
+          <div class="about-row"><div class="line is-top"></div><span class="label">Servicios</span><span class="label">Diseño web, UX/UI, desarrollo &amp; IA</span></div>
+          <div class="about-row"><div class="line is-top"></div><span class="label">Experiencia</span><span class="label">3 años</span></div>
+          <div class="about-row"><div class="line is-top"></div><span class="label">Ubicación</span><span class="label">Torrevieja, Alicante</span></div>
+          <div class="about-row"><div class="line is-top"></div><span class="label">Zona horaria</span><span class="label" data-timezone="Europe/Madrid" data-timezone-label="ESP">ESP --:--</span></div>
+          <div class="about-row"><div class="line is-top"></div><span class="label">Disponibilidad</span><span class="label">Completa</span></div>
+          <a href="#work" class="button" data-scroll-link>
+            <span class="button-text"><span>Ver trabajo</span><span aria-hidden="true">Ver trabajo</span></span>
+            <span class="button-dot" aria-hidden="true"></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="statement">
+      <h2 class="heading-2" data-gradient-wave>Tu marca es lo que la gente dice de ti cuando no estás delante</h2>
+      <p class="label quote-author">— Jeff Bezos</p>
+    </section>
+
+    <section class="work-intro" id="work">
+      <p class="label">Proyectos seleccionados</p>
+      <h2 class="heading-extreme" data-stagger-char data-start="top 90%">Trabajos</h2>
+    </section>
+
+    <section class="carousel" data-carousel tabindex="0" aria-roledescription="carrusel" aria-label="Trabajos. Usa las flechas para moverte e Intro para abrir.">
+      <canvas class="carousel-canvas" data-carousel-canvas aria-hidden="true"></canvas>
+      <div class="carousel-caption" data-carousel-caption aria-live="polite"></div>
+      <div class="carousel-counter label" data-carousel-counter aria-hidden="true"></div>
+      <ul class="carousel-items" role="list">
+        <li><a href="https://docselemental.com" target="_blank" rel="noopener" data-carousel-item><img src="assets/work/docselemental.webp" alt="Web de Docselemental, app de documentos para autónomos" width="1600" height="1000" loading="lazy"><span data-carousel-content><span class="carousel-title">Docselemental</span><span class="carousel-meta label">Mi primer proyecto profesional / web &amp; app</span></span></a></li>      </ul>
+    </section>
+
+    <footer class="section-footer" id="contact">
+      <div class="footer-base">
+        <div class="footer-gradient" aria-hidden="true"></div>
+        <div class="footer-row label">
+          <span>carlosvaquero.work</span>
+        </div>
+        <div class="footer-bottom">
+          <div class="footer-row">
+            <div class="footer-col">
+              <span class="label is-muted">Teléfono</span>
+              <a class="label" href="tel:+34642392288" data-link-stagger>+34 642 39 22 88</a>
+              <span class="label is-muted footer-gap">Email</span>
+              <a class="label" href="mailto:vaqueromuelacarlos@gmail.com" data-link-stagger>vaqueromuelacarlos@gmail.com</a>
+            </div>
+            <div class="footer-col is-right">
+              <span class="label is-muted">Instagram</span>
+              <a class="label" href="https://www.instagram.com/carlos_vaquero25/" target="_blank" rel="noopener" data-link-stagger>@carlos_vaquero25</a>
+            </div>
+          </div>
+          <div class="line"></div>
+          <div class="marquee" data-marquee data-marquee-speed="20" data-marquee-scroll="10" aria-hidden="true">
+            <div class="marquee-track">
+              <div class="marquee-item"><span class="marquee-text">Carlosvaquero<span class="is-accent">.work</span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

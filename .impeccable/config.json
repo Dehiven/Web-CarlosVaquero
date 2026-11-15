@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          "site/index.html"
+        ],
+        "createdAt": "2026-11-15T13:27:42.911Z",
+        "reason": "Claude: footer glow replicates the reference site (tomdekoning.work) the user asked to copy identically"
+      }
+    ]
+  }
+}
