@@ -441,6 +441,129 @@
   }
 
   /* Carrusel de trabajos con lente de cristal (WebGL) */
+  /* Esfera de cosas que me mueven: arrastrar para girar, con inercia */
+  function initStuff() {
+    const root = $('[data-stuff]');
+    if (!root) return;
+    const sphere = $('.stuff-sphere', root), caption = $('[data-stuff-caption]', root);
+    // Repite los referentes hasta llenar la esfera; las copias son decorativas para lectores de pantalla
+    const originals = $$('[data-stuff-item]', root);
+    for (let i = originals.length; i < Math.max(20, originals.length); i++) {
+      const copy = originals[i % originals.length].cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      $('button', copy).tabIndex = -1;
+      sphere.append(copy);
+    }
+    const items = $$('[data-stuff-item]', root);
+    const n = items.length, golden = Math.PI * (3 - Math.sqrt(5));
+    // Puntos repartidos uniformemente en la esfera (espiral de Fibonacci)
+    const pts = items.map((_, i) => {
+      const y = 1 - (i + .5) / n * 2, r = Math.sqrt(1 - y * y), t = i * golden;
+      return [Math.cos(t) * r, y, Math.sin(t) * r];
+    });
+    // Barajado fijo: con i % referentes las copias caían en fila; así se reparten por toda la esfera
+    let seed = 7;
+    for (let i = n - 1; i > 0; i--) {
+      seed = (seed * 16807) % 2147483647;
+      const j = seed % (i + 1);
+      [pts[i], pts[j]] = [pts[j], pts[i]];
+    }
+    const idle = reduced ? 0 : .0016;
+    let rx = -.25, ry = 0, vx = 0, vy = idle, w = 0, h = 0, R = 0, Ry = 0, sizes = [];
+    let drag = null, visible = false, raf = 0;
+
+    const measure = () => {
+      w = root.clientWidth; h = root.clientHeight;
+      sizes = items.map(el => [el.offsetWidth, el.offsetHeight]);
+      // Radio para que ni el elemento más ancho (a escala máxima 1.05) se salga por los lados
+      const maxW = Math.max(...sizes.map(s => s[0]));
+      R = Math.max(80, Math.min(w * .36, (w - maxW * 1.05) / 2 - 8, h * .36));
+      Ry = Math.min(h * .36, R * 1.6); // en móvil (estrecho) se estira en vertical para usar la altura
+    };
+    const render = () => {
+      const cx = Math.cos(rx), sx = Math.sin(rx), cy = Math.cos(ry), sy = Math.sin(ry);
+      pts.forEach(([x, y, z], i) => {
+        const x1 = x * cy + z * sy, z1 = z * cy - x * sy;
+        const y2 = y * cx - z1 * sx, z2 = y * sx + z1 * cx;
+        const d = (z2 + 1) / 2; // 0 = detrás, 1 = delante
+        const el = items[i], [iw, ih] = sizes[i];
+        el.style.transform = `translate3d(${w / 2 + x1 * R - iw / 2}px, ${h / 2 + y2 * Ry - ih / 2}px, 0) scale(${.45 + .6 * d})`;
+        el.style.opacity = (.18 + .82 * d * d).toFixed(3);
+        el.style.zIndex = Math.round(d * 100);
+      });
+    };
+    const tick = () => {
+      raf = 0;
+      if (!drag) {
+        ry += vy; rx += vx;
+        vy += (idle - vy) * .04; vx *= .95; // la inercia se apaga hacia el giro lento
+      }
+      render();
+      if (visible && (drag || Math.abs(vy) > 1e-5 || Math.abs(vx) > 1e-5)) raf = requestAnimationFrame(tick);
+    };
+    const play = () => { if (!raf) raf = requestAnimationFrame(tick); };
+
+    let moved = 0;
+    root.addEventListener('pointerdown', e => {
+      if (e.button) return;
+      drag = { x: e.clientX, y: e.clientY, t: performance.now() };
+      moved = 0; vx = vy = 0;
+      root.classList.add('is-dragging');
+      play();
+    });
+    addEventListener('pointermove', e => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+      const now = performance.now(), dt = Math.max(16, now - drag.t);
+      moved += Math.abs(dx) + Math.abs(dy);
+      ry += dx * .006; rx -= dy * .006;
+      vy = dx * .006 * 16 / dt; vx = -dy * .006 * 16 / dt;
+      Object.assign(drag, { x: e.clientX, y: e.clientY, t: now });
+    });
+    const end = () => { if (!drag) return; drag = null; root.classList.remove('is-dragging'); play(); };
+    addEventListener('pointerup', end);
+    addEventListener('pointercancel', end);
+    // Un arrastre no debe abrir la ficha al soltar encima de una imagen
+    root.addEventListener('click', e => { if (moved > 6) { e.preventDefault(); e.stopPropagation(); } }, true);
+
+    // Ficha de detalle
+    const dialog = $('[data-stuff-dialog]'), media = $('[data-stuff-media]'), body = $('[data-stuff-body]');
+    root.addEventListener('click', e => {
+      const li = e.target.closest('[data-stuff-item]');
+      if (!li || !dialog) return;
+      const img = $('img', li);
+      media.replaceChildren(img ? Object.assign(img.cloneNode(), { loading: 'eager' }) : Object.assign(document.createElement('span'), { className: 'stuff-dialog__name', textContent: $('.stuff-btn', li).getAttribute('aria-label') }));
+      body.replaceChildren($('.stuff-detail', li).content.cloneNode(true));
+      dialog.showModal();
+      lenis?.stop();
+    });
+    dialog?.addEventListener('close', () => lenis?.start());
+    dialog?.addEventListener('click', e => { if (e.target === dialog || e.target.closest('[data-stuff-close]')) dialog.close(); });
+
+    // Teclado: flechas giran
+    root.addEventListener('keydown', e => {
+      const k = { ArrowLeft: [0, -.06], ArrowRight: [0, .06], ArrowUp: [.06, 0], ArrowDown: [-.06, 0] }[e.key];
+      if (!k) return;
+      e.preventDefault(); vx += k[0] * .5; vy += k[1] * .5; play();
+    });
+
+    // Etiqueta del elemento bajo el cursor / tocado
+    const base = caption.textContent;
+    items.forEach(el => {
+      const label = el.dataset.label;
+      if (!label) return;
+      el.addEventListener('pointerenter', () => { caption.textContent = label; });
+      el.addEventListener('pointerleave', () => { caption.textContent = base; });
+    });
+
+    new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (visible) play(); }).observe(root);
+    addEventListener('resize', () => { measure(); render(); });
+    $$('img', root).forEach(img => img.complete || img.addEventListener('load', () => { measure(); render(); }, { once: true }));
+    root.classList.add('is-ready');
+    measure();
+    render();
+  }
+
   async function initCarousel() {
     const root = $('[data-carousel]');
     if (!root || reduced) return;
@@ -774,6 +897,7 @@
     initCursor();
     initMarquee();
     initFooterGradient();
+    initStuff();
     initCarousel();
 
     let resizeTimer = 0;

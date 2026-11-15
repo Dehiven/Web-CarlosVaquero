@@ -235,6 +235,87 @@ body::after {
 }
 .text-2-col { columns: 2; column-gap: var(--gutter); }
 
+/* ---------- Lo que me mueve (esfera) ---------- */
+.stuff {
+  position: relative; overflow: hidden;
+  height: 100vh; height: 100svh; min-height: 560px;
+  touch-action: pan-y; /* scroll vertical normal; arrastre horizontal gira */
+  cursor: grab; user-select: none; -webkit-user-select: none;
+  outline: none;
+}
+.stuff.is-dragging { cursor: grabbing; }
+.stuff:focus-visible { outline: 2px solid var(--accent); outline-offset: -8px; }
+.stuff-glow {
+  position: absolute; left: 50%; top: 50%; width: min(80vw, 760px); aspect-ratio: 1;
+  transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(0, 65, 180, .35), rgba(1, 122, 159, .12) 60%, transparent);
+}
+.stuff-title { position: absolute; top: var(--gutter); left: var(--gutter); z-index: 2; }
+.stuff-caption {
+  position: absolute; left: var(--gutter); right: var(--gutter); bottom: var(--gutter); z-index: 2;
+  text-align: center; pointer-events: none;
+}
+.stuff-sphere { list-style: none; position: absolute; inset: 0; }
+.stuff-item {
+  --size: clamp(72px, 9vw, 150px);
+  position: absolute; left: 0; top: 0; width: var(--size);
+  transform-origin: 50% 50%; will-change: transform, opacity;
+}
+.stuff-btn { display: block; width: 100%; border-radius: 6px; cursor: inherit; }
+.stuff-item img {
+  width: 100%; height: auto; pointer-events: none; border-radius: 6px;
+  -webkit-user-drag: none; box-shadow: 0 10px 24px rgba(0, 0, 0, .45);
+}
+.stuff-item.is-text { width: auto; }
+.stuff-item.is-text .stuff-btn span {
+  display: block; white-space: nowrap;
+  padding: .6em .9em; border-radius: 999px;
+  background: rgba(227, 232, 240, .08); border: 1px solid var(--hairline);
+  font-size: 14px; line-height: 1; text-transform: uppercase;
+}
+.stuff:not(.is-ready) .stuff-sphere {
+  /* Sin JS: rejilla simple */
+  position: static; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;
+  padding: 96px var(--gutter);
+}
+.stuff:not(.is-ready) .stuff-item { position: static; }
+
+/* Ficha de detalle */
+.stuff-dialog {
+  margin: auto; width: min(880px, calc(100vw - 2 * var(--gutter))); max-height: calc(100svh - 2 * var(--gutter));
+  padding: 0; border: 1px solid var(--hairline); border-radius: 8px;
+  background: var(--surface); color: var(--sand);
+  display: none; grid-template-columns: 2fr 3fr; overflow: auto;
+}
+.stuff-dialog[open] { display: grid; animation: dialog-in .5s var(--ease-out); }
+.stuff-dialog::backdrop { background: rgba(13, 14, 21, .72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(16px) scale(.98); } }
+.stuff-dialog__media { position: relative; min-height: 240px; background: radial-gradient(closest-side, rgba(0, 65, 180, .35), transparent) center / 100% 100% no-repeat; }
+.stuff-dialog__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.stuff-dialog__name {
+  position: absolute; inset: 0; display: grid; place-items: center; padding: var(--gutter);
+  font-size: 40px; line-height: 1; text-transform: uppercase; letter-spacing: -.02em; text-align: center;
+}
+.stuff-dialog__body { padding: 56px 32px 32px; max-width: 65ch; }
+.stuff-name { font-size: 48px; font-weight: 400; line-height: 1; letter-spacing: -.03em; text-transform: uppercase; }
+.stuff-sub { margin-top: 10px; color: var(--teal-bright); }
+.stuff-dialog__body p:not(.label) { margin-top: 18px; color: rgba(227, 232, 240, .82); }
+.stuff-link { margin-top: 32px; }
+.stuff-dialog__body .stuff-credit { margin-top: 32px; font-size: 12px; color: var(--muted); }
+.stuff-credit a { text-decoration: underline; text-underline-offset: 2px; }
+.stuff-close {
+  position: absolute; top: 16px; right: 16px; z-index: 1;
+  padding: .6em .9em; border-radius: 6px; background: rgba(255, 255, 255, .1);
+  transition: background-color .3s var(--ease-out);
+}
+.stuff-close:hover { background: rgba(255, 255, 255, .18); }
+@media (max-width: 767px) {
+  .stuff-dialog[open] { display: block; } /* en rejilla las filas se encogían y el texto pisaba la foto */
+  .stuff-dialog__media { min-height: 0; aspect-ratio: 4 / 3; }
+  .stuff-dialog__body { padding: 24px 20px 28px; }
+  .stuff-name { font-size: 36px; }
+}
+
 /* ---------- Work ---------- */
 .work-intro { padding: 0 var(--gutter); }
 .heading-extreme {

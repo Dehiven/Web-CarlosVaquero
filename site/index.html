@@ -27,6 +27,7 @@
   <div class="menu" id="menu">
     <a class="menu-link" href="#top" data-link-stagger>Info</a>
     <a class="menu-link" href="#about" data-link-stagger>Sobre mí</a>
+    <a class="menu-link" href="#stuff" data-link-stagger>Lo que me mueve</a>
     <a class="menu-link" href="#work" data-link-stagger>Trabajos</a>
     <a class="menu-link" href="#contact" data-link-stagger>Contacto</a>
   </div>
@@ -81,6 +82,40 @@
       <h2 class="heading-2" data-gradient-wave>Tu marca es lo que la gente dice de ti cuando no estás delante</h2>
       <p class="label quote-author">— Jeff Bezos</p>
     </section>
+
+    <section class="stuff" id="stuff" data-stuff tabindex="0" aria-label="Lo que me mueve: referentes y motivaciones. Arrastra o usa las flechas para girar.">
+      <div class="stuff-glow" aria-hidden="true"></div>
+      <p class="label stuff-title">Lo que me mueve</p>
+      <ul class="stuff-sphere" role="list">
+        <li class="stuff-item" data-stuff-item data-label="Ted Lasso — Creer">
+          <button type="button" class="stuff-btn" aria-label="Ted Lasso"><img src="assets/stuff/ted-lasso.webp" alt="Ted Lasso con el pulgar arriba y un balón bajo el brazo" width="480" height="600" loading="lazy" draggable="false"></button>
+          <template class="stuff-detail"><h3 class="stuff-name">Ted Lasso</h3><p class="label stuff-sub">Creer</p><p>Me gusta esa clase de persona positiva.</p></template>
+        </li>
+        <li class="stuff-item" data-stuff-item data-label="Steve Jobs">
+          <button type="button" class="stuff-btn" aria-label="Steve Jobs"><img src="assets/stuff/jobs.webp" alt="Retrato de Steve Jobs sonriendo" width="480" height="600" loading="lazy" draggable="false"></button>
+          <template class="stuff-detail"><h3 class="stuff-name">Steve Jobs</h3><p class="stuff-credit">Foto: <a href="https://commons.wikimedia.org/wiki/File:Steve_Jobs_Headshot_2010_(cropped_6).jpg" target="_blank" rel="noopener">Matthew Yohe</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.es" target="_blank" rel="noopener">CC BY-SA 3.0</a> (recortada)</p></template>
+        </li>
+        <li class="stuff-item" data-stuff-item data-label="Phil Knight">
+          <button type="button" class="stuff-btn" aria-label="Phil Knight"><img src="assets/stuff/knight.webp" alt="Retrato en blanco y negro de Phil Knight de joven" width="480" height="600" loading="lazy" draggable="false"></button>
+          <template class="stuff-detail"><h3 class="stuff-name">Phil Knight</h3></template>
+        </li>
+        <li class="stuff-item" data-stuff-item data-label="Kobe Bryant — Mentalidad Mamba">
+          <button type="button" class="stuff-btn" aria-label="Kobe Bryant"><img src="assets/stuff/kobe.webp" alt="Kobe Bryant botando el balón con la camiseta 24 de los Lakers" width="480" height="600" loading="lazy" draggable="false"></button>
+          <template class="stuff-detail"><h3 class="stuff-name">Kobe Bryant</h3><p class="label stuff-sub">Mentalidad Mamba</p><p>Este es mi vídeo de consuelo cuando necesito un recordatorio para superarme. ¿Y quién mejor que Kobe? ¿Me gusta el baloncesto? En realidad no. ¿Me encantaría? Por supuesto. De alguna manera, cada año se me olvida verlo. Pero esto no va realmente de baloncesto. Va de un hombre: Kobe. La Mamba Negra.</p><p>Tenía una de las mentalidades más inspiradoras que he estudiado. Me encanta su forma de pensar. Su disciplina. Su incansable ética de trabajo. Su obsesión por mejorar. Su compromiso por convertirse en la mejor versión de sí mismo. Descansa en paz, Mamba.</p><a class="button stuff-link" href="https://www.youtube.com/watch?v=GE0UAdxPTc0" target="_blank" rel="noopener"><span class="button-text"><span>Ver el vídeo</span><span aria-hidden="true">Ver el vídeo</span></span><span class="button-dot" aria-hidden="true"></span></a><p class="stuff-credit">Foto: <a href="https://commons.wikimedia.org/wiki/File:Kobe_Bryant_Dec_2014.jpg" target="_blank" rel="noopener">Keith Allison</a> · <a href="https://creativecommons.org/licenses/by-sa/2.0/deed.es" target="_blank" rel="noopener">CC BY-SA 2.0</a> (recortada)</p></template>
+        </li>
+        <li class="stuff-item" data-stuff-item data-label="Spider-Man">
+          <button type="button" class="stuff-btn" aria-label="Spider-Man"><img src="assets/stuff/spiderman.webp" alt="Spider-Man con el traje rojo y negro" width="480" height="600" loading="lazy" draggable="false"></button>
+          <template class="stuff-detail"><h3 class="stuff-name">Spider-Man</h3></template>
+        </li>
+      </ul>
+      <p class="label is-muted stuff-caption" data-stuff-caption aria-live="polite">Esto es lo que tengo en la cabeza. Arrastra para girar.</p>
+    </section>
+
+    <dialog class="stuff-dialog" data-stuff-dialog aria-label="Detalle">
+      <button type="button" class="stuff-close label" data-stuff-close>Cerrar</button>
+      <div class="stuff-dialog__media" data-stuff-media></div>
+      <div class="stuff-dialog__body" data-stuff-body></div>
+    </dialog>
 
     <section class="work-intro" id="work">
       <p class="label">Proyectos seleccionados</p>
