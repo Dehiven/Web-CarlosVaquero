@@ -420,9 +420,9 @@ body::after {
   .hero-title { font-size: 15vw; }
   .about { padding: 120px var(--gutter) 160px; }
   .statement { padding: 120px var(--gutter) 160px; }
-  .menu-link { font-size: 15vw; }
+  .menu-link { font-size: 10vw; } /* «Lo que me mueve» es el más largo: a 15vw se salía */
   .carousel-title { font-size: 40px; }
-  .footer-base { min-height: 560px; }
+  .footer-base { min-height: 0; gap: 56px; }
   .footer-bottom .footer-row { flex-direction: column; gap: 18px; }
   .footer-col.is-right { align-items: flex-start; text-align: left; }
   .footer-col a { overflow-wrap: anywhere; }

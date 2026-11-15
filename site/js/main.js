@@ -579,7 +579,7 @@
     const total = items.length;
 
     let renderer;
-    try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); }
+    try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
     catch (err) { console.warn('[Carrusel] Sin WebGL; se muestra la lista.', err); return; }
     root.classList.add('is-gl');
 
@@ -660,7 +660,6 @@
       uRes: { value: new THREE.Vector2(W, H) },
       uLens: { value: new THREE.Vector2(W * .6, W) },
       uTime: { value: 0 },
-      uBg: { value: new THREE.Color(cssVar('--black')) },
       uRing: { value: new THREE.Color(cssVar('--teal-bright')) }
     };
     const lens = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
@@ -672,7 +671,7 @@
         uniform sampler2D uScene;
         uniform vec2 uRes, uLens;
         uniform float uTime;
-        uniform vec3 uBg, uRing;
+        uniform vec3 uRing;
 
         vec4 sampleScene(vec2 uv) { return texture2D(uScene, clamp(uv, 0.0, 1.0)); }
 
@@ -696,17 +695,18 @@
 
           float mask = 1.0 - smoothstep(0.93, 1.0, d);
           vec4 col = mix(base, lensCol, mask);
-          vec3 rgb = mix(uBg, col.rgb, col.a);
 
           // Anillo de luz con brillo que recorre el borde
           float ringD = d * 0.5 - 0.49;
           float ring = exp(-pow(ringD / 0.01, 2.0));
           float aura = exp(-pow(ringD / 0.06, 2.0)) * 0.28;
           float shimmer = sin(ang * 12.0 + uTime * 3.5) * 0.12 + 0.88;
-          rgb += uRing * (ring * shimmer * 0.42 + aura * 0.24);
-          rgb += vec3(exp(-pow((d * 0.5 - 0.488) / 0.003, 2.0)));
+          vec3 glow = uRing * (ring * shimmer * 0.42 + aura * 0.24) + vec3(exp(-pow((d * 0.5 - 0.488) / 0.003, 2.0)));
 
-          gl_FragColor = vec4(rgb, 1.0);
+          // Fondo transparente: se ve el fondo de la página entre las imágenes (rgb ya premultiplicado: el vacío es 0)
+          vec3 rgb = col.rgb + glow;
+          float alpha = clamp(col.a + max(glow.r, max(glow.g, glow.b)), 0.0, 1.0);
+          gl_FragColor = vec4(rgb, alpha);
           #include <colorspace_fragment>
         }
       `
