@@ -1,6 +1,6 @@
 :root {
   /* Paleta sacada del fondo de Foto_perfil.png */
-  --black: #0d0e15;
+  --black: #0f1015; /* entre el fondo de la foto (#111317 arriba, #0c0e12 abajo) y el azul noche */
   --surface: #11131c;
   --sand: #e3e8f0;
   --muted: rgba(227, 232, 240, .5);
@@ -25,7 +25,7 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-stopped { overflow: hidden; }
 
 body {
-  background: var(--black);
+  background: transparent; /* the color lives on html; .page-bg (fixed, z -1) carries the light */
   color: var(--sand);
   font-family: var(--font);
   font-size: 16px;
@@ -45,6 +45,25 @@ img { display: block; max-width: 100%; }
 .playfair-o { font-family: var(--serif); font-style: italic; font-weight: 400; }
 
 .line { height: 1px; width: 100%; background: var(--hairline); transform-origin: left center; }
+
+/* ---------- Fondo continuo: la misma luz que la foto (azul a la izquierda, turquesa abajo a la derecha) ---------- */
+.page-bg {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+  background: linear-gradient(180deg, #121419 0%, var(--black) 45%, #0c0e12 100%);
+}
+.page-glow { position: absolute; display: block; border-radius: 50%; will-change: transform, opacity; }
+.page-glow.is-blue {
+  left: -30vmax; top: calc(55% - 35vmax); width: 70vmax; height: 70vmax;
+  background: radial-gradient(closest-side, rgba(0, 65, 177, .34), rgba(4, 50, 135, .14) 55%, transparent);
+  animation: glow-blue 22s ease-in-out infinite alternate;
+}
+.page-glow.is-teal {
+  right: -30vmax; top: calc(68% - 32vmax); width: 64vmax; height: 64vmax;
+  background: radial-gradient(closest-side, rgba(0, 82, 113, .32), rgba(2, 57, 79, .12) 55%, transparent);
+  animation: glow-teal 27s ease-in-out infinite alternate;
+}
+@keyframes glow-blue { to { transform: translate(6vmax, -6vmax) scale(1.1); opacity: .8; } }
+@keyframes glow-teal { to { transform: translate(-6vmax, 5vmax) scale(.92); opacity: .85; } }
 
 /* ---------- Cursor ---------- */
 .cursor-canvas { position: fixed; inset: 0; z-index: 90; pointer-events: none; }
@@ -413,7 +432,7 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   .js .seq-photo { clip-path: none; }
   .js .seq-aura { opacity: 1; }
-  .aura { animation: none; }
+  .aura, .page-glow { animation: none; }
   .js .navbar { opacity: 1; }
   .js [data-stagger-char] { visibility: visible; }
 }

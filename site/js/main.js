@@ -503,11 +503,11 @@
     };
     const play = () => { if (!raf) raf = requestAnimationFrame(tick); };
 
-    let moved = 0;
+    let moved = 0, sx0 = 0, sy0 = 0;
     root.addEventListener('pointerdown', e => {
       if (e.button) return;
       drag = { x: e.clientX, y: e.clientY, t: performance.now() };
-      moved = 0; vx = vy = 0;
+      moved = 0; sx0 = e.clientX; sy0 = e.clientY; vx = vy = 0;
       root.classList.add('is-dragging');
       play();
     });
@@ -515,7 +515,7 @@
       if (!drag) return;
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
       const now = performance.now(), dt = Math.max(16, now - drag.t);
-      moved += Math.abs(dx) + Math.abs(dy);
+      moved = Math.max(moved, Math.hypot(e.clientX - sx0, e.clientY - sy0)); // distancia real, no el temblor del dedo
       ry += dx * .006; rx -= dy * .006;
       vy = dx * .006 * 16 / dt; vx = -dy * .006 * 16 / dt;
       Object.assign(drag, { x: e.clientX, y: e.clientY, t: now });
@@ -524,7 +524,7 @@
     addEventListener('pointerup', end);
     addEventListener('pointercancel', end);
     // Un arrastre no debe abrir la ficha al soltar encima de una imagen
-    root.addEventListener('click', e => { if (moved > 6) { e.preventDefault(); e.stopPropagation(); } }, true);
+    root.addEventListener('click', e => { if (moved > 12) { e.preventDefault(); e.stopPropagation(); } }, true);
 
     // Ficha de detalle
     const dialog = $('[data-stuff-dialog]'), media = $('[data-stuff-media]'), body = $('[data-stuff-body]');
