@@ -357,6 +357,7 @@ body::after {
   text-align: center; pointer-events: none;
 }
 .carousel-caption [data-carousel-content] { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+[data-carousel-content] { text-shadow: 0 2px 6px rgba(0,0,0,.55), 0 6px 32px rgba(0,0,0,.6); }
 .carousel-title { font-size: 72px; line-height: 1.2; text-transform: uppercase; letter-spacing: -.02em; }
 .carousel-meta { color: var(--muted); }
 .carousel-counter { position: absolute; bottom: 9%; left: 0; right: 0; text-align: center; color: var(--muted); }
@@ -369,7 +370,7 @@ body::after {
 }
 .carousel-items li { flex: none; width: min(78vw, 960px); scroll-snap-align: center; }
 .carousel-items a { display: flex; flex-direction: column; gap: 12px; }
-.carousel-items img { width: 100%; height: auto; border-radius: 4px; }
+.carousel-items img { width: 100%; height: auto; border-radius: 14px; }
 .carousel-items .carousel-title { font-size: 32px; }
 .carousel:not(.is-gl) .carousel-caption, .carousel:not(.is-gl) .carousel-counter { display: none; }
 .carousel.is-gl .carousel-canvas { display: block; }

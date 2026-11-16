@@ -600,7 +600,7 @@
     const single = total === 1; // un solo proyecto: sin copias en bucle, se arrastra y vuelve al centro
     for (const copy of single ? [0] : [-1, 0, 1]) {
       sources.forEach((_, i) => {
-        const mat = new THREE.MeshBasicMaterial({ color: 0x1a1d29 });
+        const mat = new THREE.MeshBasicMaterial({ color: 0x1a1d29, transparent: true });
         const mesh = new THREE.Mesh(geometry, mat);
         scene.add(mesh);
         pool.push({ mesh, mat, i, copy });
@@ -646,7 +646,9 @@
         const h = Math.min(image.naturalHeight || 1000, Math.round(H * HEIGHT * dpr() * 1.5));
         const c = document.createElement('canvas');
         c.height = h; c.width = Math.round(h * sources[i].aspect);
-        c.getContext('2d').drawImage(image, 0, 0, c.width, c.height);
+        const ctx = c.getContext('2d');
+        ctx.beginPath(); ctx.roundRect(0, 0, c.width, c.height, h * .025); ctx.clip(); // esquinas redondeadas
+        ctx.drawImage(image, 0, 0, c.width, c.height);
         const tex = new THREE.CanvasTexture(c);
         tex.colorSpace = THREE.SRGBColorSpace;
         tex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
